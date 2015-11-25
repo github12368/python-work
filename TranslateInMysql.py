@@ -3,7 +3,7 @@ import time,MySQLdb,sys,urllib,urllib2,re
 from lxml import etree
 from langconv import *
 reload(sys)
-sys.setdefaultencoding('utf8')
+sys.setdefaultencoding('utf-8')
 mysqldbip = "192.168.5.168"
 mysqldbuser = "root"
 mysqldbpsw = "ibm18911029778"

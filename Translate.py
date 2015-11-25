@@ -40,10 +40,9 @@ def translate(text):
     return LangDit[Lang],res
 
 
-
 InPut='''東山再起？上海新區書記背景驚人(圖): 無獨有偶，因2010年上海靜安大火被撤職的時任靜安區區長張仁良'''
 
-# Result=translate(InPut)
-# print Result[0], Result[1]
+Result=translate(InPut)
+print Result[0], Result[1]
 
 

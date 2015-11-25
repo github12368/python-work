@@ -65,7 +65,6 @@ def mouse_dclick(x=None,y=None):   #模拟鼠标双击
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
     windll.user32.SetCursorPos(fa, fb)
 
-
 def GetEdit():
     hn=win32gui.FindWindow(None,'编辑服务器')    #主窗口
     ClassName=win32gui.GetClassName(hn)
@@ -121,7 +120,6 @@ if Ping()==1:
     print "服务器正常，开始服务"
     state=1
 i=1
-
 while 1:
     if Ping()==0:
         if state==1:
