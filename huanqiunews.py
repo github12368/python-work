@@ -5,11 +5,10 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 hea = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36'}
 
-hqurl='http://oversea.huanqiu.com/article/'
-
+hqurl='http://world.huanqiu.com/exclusive/'
+num=3
 LastRecord=""
 RecordFlag=False
-
 def scraw(hqurl):  #爬30页
     global LastRecord
     LastRecord=GetRecord()
@@ -21,23 +20,23 @@ def scraw(hqurl):  #爬30页
         ScrawOnePage(url)
 
 def ScrawOnePage(url):  #爬1页里的60条新闻
-    global RecordFlag,LastRecord
+    global RecordFlag,LastRecord,num
     html=requests.get(url,headers = hea)
     html.encoding = 'utf-8'
     selector=etree.HTML(html.text)
     f=open('huanqiunews.txt','a+')
-    for i in range(60):
-        title=selector.xpath('/html/body/div[3]/div/div[3]/ul/li['+str(i+1)+']/h3/a/text()')[0]
-        newsurl=selector.xpath('/html/body/div[3]/div/div[3]/ul/li['+str(i+1)+']/h3/a/@href')[0]
+    for i in range(60):    #有的需将4改为3
+        title=selector.xpath('/html/body/div['+str(num)+']/div/div[3]/ul/li['+str(i+1)+']/h3/a/text()')[0]
+        newsurl=selector.xpath('/html/body/div['+str(num)+']/div/div[3]/ul/li['+str(i+1)+']/h3/a/@href')[0]
         try:
-            abstract=selector.xpath('/html/body/div[3]/div/div[3]/ul/li['+str(i+1)+']/h5/text()')[0]
+            abstract=selector.xpath('/html/body/div['+str(num)+']/div/div[3]/ul/li['+str(i+1)+']/h5/text()')[0]
         except :
             abstract=''
         try:
-            img=selector.xpath('/html/body/div[3]/div/div[3]/ul/li['+str(i+1)+']/a/img/@src')[0]
+            img=selector.xpath('/html/body/div['+str(num)+']/div/div[3]/ul/li['+str(i+1)+']/a/img/@src')[0]
         except :
             img=''
-        time=selector.xpath('/html/body/div[3]/div/div[3]/ul/li['+str(i+1)+']/h6/text()')[0]
+        time=selector.xpath('/html/body/div['+str(num)+']/div/div[3]/ul/li['+str(i+1)+']/h6/text()')[0]
         if time == LastRecord:
             print "scraw complete !"
             os._exit(0)
