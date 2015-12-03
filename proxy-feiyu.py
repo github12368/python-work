@@ -1,5 +1,5 @@
 #-*-coding:utf-8-*-
-import win32api,win32con,win32gui,time,requests,sys
+import win32api,win32con,win32gui,time,requests,sys,re
 from ctypes import *
 from lxml import etree
 reload(sys)
@@ -20,27 +20,35 @@ def Ping():
     else:
         return 1
 
-def GetServer(i):
-    #try:
-        html=requests.get('http://www.ishadowsocks.com',headers = hea)
+
+
+def GetServer():
+    while 1:
+        html=requests.get('http://www.feixunvpn.com/page/testss.html',headers = hea)
         html.encoding = 'utf-8'
-        selector=etree.HTML(html.text)
-        ip1=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[1]/h4[1]/text()')).split(":")[1][:-2]
-        ip2=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[2]/h4[1]/text()')).split(":")[1][:-2]
-        ip3=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[3]/h4[1]/text()')).split(":")[1][:-2]
-        port1=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[1]/h4[2]/text()')).split(":")[1][:-2]
-        port2=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[2]/h4[2]/text()')).split(":")[1][:-2]
-        port3=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[3]/h4[2]/text()')).split(":")[1][:-2]
-        password1=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[1]/h4[3]/text()')).split(":")[1][:-2]
-        password2=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[2]/h4[3]/text()')).split(":")[1][:-2]
-        password3=repr(selector.xpath('//*[@id="free"]/div/div[2]/div[3]/h4[3]/text()')).split(":")[1][:-2]
+        html=html.text
+        node=re.findall('<b>(.*?)</b>',html)
+        node1=node[0][5:7]
+        node2=node[1][5:7]
+        ip=re.findall('<span>(.*?)</span>',html)
+        ip1=repr(ip[7])[2:-1]
+        ip2=repr(ip[9])[2:-1]
+        ip3=''
+        port=re.findall('端口：(.*?)<'.decode('utf-8'),html,re.S)
+        port1=repr(port[0])[2:-1]
+        port2=repr(port[1])[2:-1]
+        port3=''
+        password=re.findall('密码：(.*?)<'.decode('utf-8'),html,re.S)
+        password1=repr(password[0])[2:-1]
+        password2=repr(password[1])[2:-1]
+        password3=''
         ip=[ip1,ip2,ip3]
         port=[port1,port2,port3]
         password=[password1,password2,password3]
-    #except:
-        #print "错误：ishadowsocks无法访问"
-    #else:
-        return ip[i-1],port[i-1],password[i-1]
+        if node1=="新加":
+            return ip[0],port[0],password[0]
+        if node2=="新加":
+            return ip[1],port[1],password[1]
 
 def GetPos():
     ht=win32gui.FindWindow("Shell_TrayWnd",None)   #获取托盘句柄
@@ -62,10 +70,12 @@ def mouse_dclick(x=None,y=None):   #模拟鼠标双击
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
     windll.user32.SetCursorPos(fa, fb)
-
-
+#
+# ('us1.iss.tf', '443', '71040005')
+# Setting Ok!
 def GetEdit():
-    hn=win32gui.FindWindow(None,'编辑服务器')    #主窗口
+    window='编辑服务器'.decode('utf-8').encode('gbk')
+    hn=win32gui.FindWindow(None,window)    #主窗口
     ClassName=win32gui.GetClassName(hn)
     last=ClassName[-15:]
     ClassButton='WindowsForms10.BUTTON.app.0.'+last
@@ -97,48 +107,32 @@ def SetServer(Edit,Param):
     win32gui.PostMessage(Edit[3], win32con.WM_LBUTTONDOWN, 0, 0)
     win32gui.PostMessage(Edit[3], win32con.WM_LBUTTONUP, 0, 0)
 
-def RunServer(i):
+
+def RunServer():
+     pos=GetPos()
+     time.sleep(5)
      try:
         mouse_dclick(pos[0],pos[1])
         time.sleep(0.1)
-        Param=GetServer(i)
+        Param=GetServer()
         Edit=GetEdit()
         SetServer(Edit,Param)
+        time.sleep(2)
      except:
+        print "parm setting error!"
         return 0
      else:
         return 1
 
-pos=GetPos()
-RunServer(1)
-time.sleep(3)
-
-
-state=0
-if Ping()==1:
-    print "服务器正常，开始服务"
-    state=1
-i=1
-while 1:
-    if Ping()==0:
-        if state==1:
-            state=0
-            print "服务器中断，重新连接"
-            while 1:
-                if RunServer(1)==1:
-                    break
-                else:
-                    time.sleep(3)
+def StartServer():
+    while 1:
+        if Ping()==1:
+            print "Start Server!"
+            break
         else:
-            print "服务器异常，切换服务器"
             while 1:
-                if RunServer(i%3+1)==1:
+                if RunServer()==1:
+                    print "Setting Ok!"
                     break
-                else:
-                    time.sleep(3)
-            i+=1
-    else:
-        if state==0:
-            print "重新连接成功，开始服务"
-            state=1
-    time.sleep(10)
+    return 1
+StartServer()
