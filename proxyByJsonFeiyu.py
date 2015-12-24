@@ -3,7 +3,7 @@ import time,requests,sys,os,subprocess,re
 from lxml import etree
 reload(sys)
 sys.setdefaultencoding("utf-8")
-ShadowsocksDIR="C:\Users\Administrator\Desktop"
+ShadowsocksDIR=""
 ShadowsocksDIR=ShadowsocksDIR+'\\'
 ShadowsocksPath=ShadowsocksDIR+"shadowsocks.exe"
 ShadowsocksConfPath=ShadowsocksDIR+"gui-config.json"
