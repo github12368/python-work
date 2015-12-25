@@ -4,7 +4,7 @@ from lxml import etree
 reload(sys)
 sys.setdefaultencoding("utf-8")
 ShadowsocksDIR=""
-ShadowsocksDIR=ShadowsocksDIR+'\\'
+# ShadowsocksDIR=ShadowsocksDIR+'\\'
 ShadowsocksPath=ShadowsocksDIR+"shadowsocks.exe"
 ShadowsocksConfPath=ShadowsocksDIR+"gui-config.json"
 hea = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36'}
@@ -43,7 +43,7 @@ def GetServer(i):
         password=[password1,password2,password3]
         codetype=[codetype1,codetype2,codetype3]
     except:
-        print "错误：ishadowsocks无法访问"
+        print "erro:shadowsocks website can't acess"
     else:
         return ip[i-1],port[i-1],password[i-1],codetype[i-1]
 
@@ -94,14 +94,14 @@ time.sleep(3)
 
 state=0
 if Ping()==1:
-    print "服务器正常，开始服务"
+    print "OK,Start Server!"
     state=1
 i=1
 while 1:
     if Ping()==0:
         if state==1:
             state=0
-            print "服务器中断，重新连接"
+            print "error:connect again"
             os.system('taskkill /F /IM shadowsocks.exe')
             while 1:
                 if RunServer(1)==1:
@@ -109,7 +109,7 @@ while 1:
                 else:
                     time.sleep(3)
         else:
-            print "服务器异常，切换服务器"
+            print "error:switch server"
             os.system('taskkill /F /IM shadowsocks.exe')
             while 1:
                 if RunServer(i%3+1)==1:
@@ -119,7 +119,7 @@ while 1:
             i+=1
     else:
         if state==0:
-            print "重新连接成功，开始服务"
+            print "OK,Start Server!"
             state=1
     time.sleep(10)
 
