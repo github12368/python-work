@@ -8,6 +8,8 @@ LangDit={'gu': '\xe5\x8f\xa4\xe5\x90\x89\xe6\x8b\x89\xe7\x89\xb9\xe8\xaf\xad', '
 def translate(text):
     '''''模拟浏览器的行为，向Google Translate的主页发送数据，然后抓取翻译结果 '''
     #text 输入要翻译的英文句子
+    if text=="":
+        return 'NULL','NULL'
     text_1=text
     #'langpair':'auto'|'zh-CN'从自动到简体中文
     values={'hl':'zh-CN','ie':'UTF-8','text':text_1,'langpair':"'auto'|'zh-CN'"}
@@ -40,8 +42,8 @@ def translate(text):
     return LangDit[Lang],res
 
 
-InPut='''東山再起？上海新區書記背景驚人(圖): 無獨有偶，因2010年上海靜安大火被撤職的時任靜安區區長張仁良'''
-
+InPut='''5 22 沙依巴克区公园早市无牌汽车爆炸'''
+# InPut=InPut.replace('.','。')
 Result=translate(InPut)
 print Result[0], Result[1]
 
