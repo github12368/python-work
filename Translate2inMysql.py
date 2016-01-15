@@ -20,7 +20,7 @@ LangDit={'gu': '\xe5\x8f\xa4\xe5\x90\x89\xe6\x8b\x89\xe7\x89\xb9\xe8\xaf\xad', '
 def translate(text):
     '''''模拟浏览器的行为，向Google Translate的主页发送数据，然后抓取翻译结果 '''
     #text 输入要翻译的英文句子
-    if text=="":
+    if (text=="")or(text==None):
         return 'NULL','NULL'
     text_1=text.replace('.',' ').replace('/',' ')
     #'langpair':'en'|'zh-CN'从自动到简体中文
