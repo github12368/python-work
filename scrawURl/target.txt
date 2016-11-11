@@ -1,0 +1,3 @@
+inurl:jsp?id= site:org.cn
+inurl:jsp?id= site:org
+inurl:jsp?id= site:net
